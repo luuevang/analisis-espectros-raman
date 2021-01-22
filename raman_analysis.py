@@ -1,10 +1,16 @@
 import numpy as np
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 from scipy.optimize import curve_fit
 import glob
 import os
 import xlsxwriter
+from matplotlib.ticker import MultipleLocator,FormatStrFormatter,MaxNLocator
+
+mpl.rcParams['pdf.fonttype'] = 42
+mpl.rcParams['ps.fonttype'] = 42
+mpl.rcParams['font.family'] = 'serif'
 
 # FUNCIONES MODELO
 def bwf(w, *p):
@@ -110,7 +116,7 @@ def analisis_lor(xdata, ydata, filename):
 
     return p_lor, cov_lor, x_lor, y_lor, lor_ymax
 
-lista_archivos = glob.glob(os.path.join(os.getcwd(), 'Prueba script analisis', "*.txt"))
+lista_archivos = glob.glob(os.path.join(os.getcwd(), 'C:/Users/lucia/Dropbox/Labo 6 y 7/Raman/Prueba script analisis', "*.txt"))
 
 ajuste_bwf = []   # Parámetros de ajuste de la BWF   
 ajuste_lor = []   # Parámetros de ajuste de la lorentziana  
@@ -120,7 +126,7 @@ ymax_lor = []     # f(w_max) - Lor
 muestra = []      # Lista para guardar los nombres de los archivos para el excel
 IdIg = []         # Cociente entre las intensidades máximas del pico D y G
 
-with PdfPages('Prueba script analisis\Resumen_resultados.pdf') as pdf:
+with PdfPages('C:/Users/lucia/Dropbox/Labo 6 y 7/Raman/Prueba script analisis/Resumen_resultados.pdf') as pdf:
     for arx in lista_archivos:
         filename = arx.split("\\")
         archivo = filename[-1].split('.')
@@ -134,21 +140,26 @@ with PdfPages('Prueba script analisis\Resumen_resultados.pdf') as pdf:
         p_lor, cov_lor, x_lor, y_lor, lor_ymax = analisis_lor(xdata, ydata, arx)
         print('{} -- ANALIZADO'.format(archivo[0]))
 
-        fig = plt.figure()
-        plt.yticks(np.arange(0, 250, 25))
+        fig = plt.figure(figsize=(10,6))
+        ax = plt.axes()
+        ax.yaxis.set_major_locator(MultipleLocator(50))
+        ax.yaxis.set_minor_locator(MultipleLocator(25))
+        ax.xaxis.set_major_locator(MultipleLocator(200))
+        ax.xaxis.set_minor_locator(MultipleLocator(100))
+        # plt.yticks(np.arange(0, 250, 25))
         plt.plot(xdata, ydata,'y')
         plt.plot(xdata, bwf(xdata, *par), '--g', linewidth=1)
         plt.plot(w_max, bwf(w_max, *par), '*k')
         plt.plot(xdata, lorentz(xdata, *p_lor), '--m', linewidth=1)
         plt.plot(xdata, bwf(xdata, *par) + lorentz(xdata, *p_lor), 'b', linewidth=1)
-        plt.legend(['Datos', 'BWF - Modelo', 'Max BWF', 'LOR - Modelo', 'Ajuste'], loc = 2)
-        plt.xlabel('Raman Shift [cm$^{-1}$]')
-        plt.ylabel('Intensidad [u.a.]')
-        plt.title('Muestra {}'.format(archivo[0]))
-        plt.grid()
-        plt.savefig('Prueba script analisis\{}.png'.format(archivo[0]))
-        pdf.savefig(fig)
-        plt.close()
+        plt.legend(['Datos', 'BWF - Modelo', 'Max BWF', 'LOR - Modelo', 'Ajuste'], loc = 2, fontsize = 14)
+        plt.xlabel('Raman Shift [cm$^{-1}$]', fontsize = 16, ha = 'center')
+        plt.ylabel('Intensidad [u.a.]', fontsize = 16, ha = 'center')
+        plt.title('Muestra {}'.format(archivo[0]), fontsize = 20, ha = 'center', weight = 'bold')
+        # plt.savefig('Prueba script analisis\{}.png'.format(archivo[0]))
+        # pdf.savefig(fig)
+        plt.show()
+        # plt.close()
 
         newpar = par.tolist()
         ajuste_bwf.append(newpar)
@@ -185,25 +196,25 @@ with PdfPages('Prueba script analisis\Resumen_resultados.pdf') as pdf:
     # plt.show()
     plt.close()
 
-excel = xlsxwriter.Workbook('Prueba script analisis\Parametros de ajuste.xlsx')
-worksheet = excel.add_worksheet()
-number_format = excel.add_format({'num_format' : '####0.##'})
-columnas = ['Muestra', 'Tiempo','I0', 'w0', 'Q', 'g_bwf', 'bwf x_max*', 'bwf y_max*', '', 'A', 'x0', 'g_lor', 'lor y_max*', '','I(D)/I(G)', 'Tipo de estructura']
-worksheet.write_row(0, 0, columnas)
-worksheet.write_column(1, 0, muestra)
-worksheet.write_column(1, 6, xmax_bwf, number_format)
-worksheet.write_column(1, 7, ymax_bwf, number_format)
-worksheet.write_column(1, 12, ymax_lor, number_format)
-worksheet.write_column(1, 14, IdIg, number_format)
-worksheet.write_column(1, 15, estructura)
+# excel = xlsxwriter.Workbook('Prueba script analisis\Parametros de ajuste.xlsx')
+# worksheet = excel.add_worksheet()
+# number_format = excel.add_format({'num_format' : '####0.##'})
+# columnas = ['Muestra', 'Tiempo','I0', 'w0', 'Q', 'g_bwf', 'bwf x_max*', 'bwf y_max*', '', 'A', 'x0', 'g_lor', 'lor y_max*', '','I(D)/I(G)', 'Tipo de estructura']
+# worksheet.write_row(0, 0, columnas)
+# worksheet.write_column(1, 0, muestra)
+# worksheet.write_column(1, 6, xmax_bwf, number_format)
+# worksheet.write_column(1, 7, ymax_bwf, number_format)
+# worksheet.write_column(1, 12, ymax_lor, number_format)
+# worksheet.write_column(1, 14, IdIg, number_format)
+# worksheet.write_column(1, 15, estructura)
 
-for row_num, row_data in enumerate(ajuste_bwf):
-    for col_num, col_data in enumerate(row_data):
-        worksheet.write(row_num + 1, col_num + 2, col_data, number_format)
+# for row_num, row_data in enumerate(ajuste_bwf):
+#     for col_num, col_data in enumerate(row_data):
+#         worksheet.write(row_num + 1, col_num + 2, col_data, number_format)
 
-for row_num, row_data in enumerate(ajuste_lor):
-    for col_num, col_data in enumerate(row_data):
-        worksheet.write(row_num + 1, col_num + 9, col_data, number_format)
+# for row_num, row_data in enumerate(ajuste_lor):
+#     for col_num, col_data in enumerate(row_data):
+#         worksheet.write(row_num + 1, col_num + 9, col_data, number_format)
 
-excel.close()
+# excel.close()
 
