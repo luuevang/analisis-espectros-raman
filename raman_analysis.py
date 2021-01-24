@@ -116,7 +116,7 @@ def analisis_lor(xdata, ydata, filename):
 
     return p_lor, cov_lor, x_lor, y_lor, lor_ymax
 
-lista_archivos = glob.glob(os.path.join(os.getcwd(), 'C:/Users/lucia/Dropbox/Labo 6 y 7/Raman/Prueba script analisis', "*.txt"))
+lista_archivos = glob.glob(os.path.join(os.getcwd(), 'Prueba script analisis', "*.txt"))
 
 ajuste_bwf = []   # Parámetros de ajuste de la BWF   
 ajuste_lor = []   # Parámetros de ajuste de la lorentziana  
@@ -128,7 +128,7 @@ IdIg = []         # Cociente entre las intensidades máximas del pico D y G
 
 analisis_fail = []  #Lista para guardar los archivos cuyo análisis no converja
 
-with PdfPages('C:/Users/lucia/Dropbox/Labo 6 y 7/Raman/Prueba script analisis/Resumen_resultados.pdf') as pdf:
+with PdfPages('Prueba script analisis/Resumen_resultados.pdf') as pdf:
     for arx in lista_archivos:
         filename = arx.split("\\")
         archivo = filename[-1].split('.')
