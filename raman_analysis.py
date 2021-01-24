@@ -71,7 +71,6 @@ def analisis_bwf(xdata, ydata, filename):
     w0 = x_bwf[np.argmax(y_bwf)]
     ancho = x_bwf[int((np.argmin(y_bwf) + np.argmax(y_bwf))/2)] - x_bwf[0]
     factorQ = - ancho/i0
-    # factorQ = 0.01
     p = np.array([i0, w0, factorQ, ancho])
 
     try:
@@ -80,6 +79,7 @@ def analisis_bwf(xdata, ydata, filename):
         y_max = bwf(w_max, *par)
     except RuntimeError:
         print('Error: falló el ajuste BWF del archivo {}'.format(filename))
+        pass
     
     return par, cov, x_bwf, y_bwf, w_max, y_max
 
@@ -96,7 +96,7 @@ def analisis_lor(xdata, ydata, filename):
             lor_ymax = lorentz(lor_xmax, *p_lor)
     ------------------------------------------------------------------------
     """
-    y_aux = ydata - bwf(xdata, *par)
+    y_aux = ydata - bwf(xdata, *par_bwf)
     index3 = np.where(xdata>1180)[0][0]
     index4 = np.where(xdata>1400)[0][0]
     x_lor = xdata[index3 : index4]
@@ -126,6 +126,8 @@ ymax_lor = []     # f(w_max) - Lor
 muestra = []      # Lista para guardar los nombres de los archivos para el excel
 IdIg = []         # Cociente entre las intensidades máximas del pico D y G
 
+analisis_fail = []  #Lista para guardar los archivos cuyo análisis no converja
+
 with PdfPages('C:/Users/lucia/Dropbox/Labo 6 y 7/Raman/Prueba script analisis/Resumen_resultados.pdf') as pdf:
     for arx in lista_archivos:
         filename = arx.split("\\")
@@ -136,39 +138,44 @@ with PdfPages('C:/Users/lucia/Dropbox/Labo 6 y 7/Raman/Prueba script analisis/Re
         xdata = datos[:,0]
         ydata = datos[:,1]
 
-        par, cov, x_bwf, y_bwf, w_max, y_max = analisis_bwf(xdata, ydata, arx)
-        p_lor, cov_lor, x_lor, y_lor, lor_ymax = analisis_lor(xdata, ydata, arx)
-        print('{} -- ANALIZADO'.format(archivo[0]))
+        try:
+            par_bwf, cov_bwf, x_bwf, y_bwf, w_max, y_max = analisis_bwf(xdata, ydata, arx)
+            p_lor, cov_lor, x_lor, y_lor, lor_ymax = analisis_lor(xdata, ydata, arx)
+            print('{} -- ANALIZADO'.format(archivo[0]))
 
-        fig = plt.figure(figsize=(10,6))
-        ax = plt.axes()
-        ax.yaxis.set_major_locator(MultipleLocator(50))
-        ax.yaxis.set_minor_locator(MultipleLocator(25))
-        ax.xaxis.set_major_locator(MultipleLocator(200))
-        ax.xaxis.set_minor_locator(MultipleLocator(100))
-        # plt.yticks(np.arange(0, 250, 25))
-        plt.plot(xdata, ydata,'y')
-        plt.plot(xdata, bwf(xdata, *par), '--g', linewidth=1)
-        plt.plot(w_max, bwf(w_max, *par), '*k')
-        plt.plot(xdata, lorentz(xdata, *p_lor), '--m', linewidth=1)
-        plt.plot(xdata, bwf(xdata, *par) + lorentz(xdata, *p_lor), 'b', linewidth=1)
-        plt.legend(['Datos', 'BWF - Modelo', 'Max BWF', 'LOR - Modelo', 'Ajuste'], loc = 2, fontsize = 14)
-        plt.xlabel('Raman Shift [cm$^{-1}$]', fontsize = 16, ha = 'center')
-        plt.ylabel('Intensidad [u.a.]', fontsize = 16, ha = 'center')
-        plt.title('Muestra {}'.format(archivo[0]), fontsize = 20, ha = 'center', weight = 'bold')
-        # plt.savefig('Prueba script analisis\{}.png'.format(archivo[0]))
-        # pdf.savefig(fig)
-        plt.show()
-        # plt.close()
+            fig = plt.figure(figsize=(10,6))
+            ax = plt.axes()
+            ax.yaxis.set_major_locator(MultipleLocator(50))
+            ax.yaxis.set_minor_locator(MultipleLocator(25))
+            ax.xaxis.set_major_locator(MultipleLocator(200))
+            ax.xaxis.set_minor_locator(MultipleLocator(100))
+            # plt.yticks(np.arange(0, 250, 25))
+            plt.plot(xdata, ydata,'y')
+            plt.plot(xdata, bwf(xdata, *par_bwf), '--g', linewidth=1)
+            plt.plot(w_max, bwf(w_max, *par_bwf), '*k')
+            plt.plot(xdata, lorentz(xdata, *p_lor), '--m', linewidth=1)
+            plt.plot(xdata, bwf(xdata, *par_bwf) + lorentz(xdata, *p_lor), 'b', linewidth=1)
+            plt.legend(['Datos', 'BWF - Modelo', 'Max BWF', 'LOR - Modelo', 'Ajuste'], loc = 2, fontsize = 14)
+            plt.xlabel('Raman Shift [cm$^{-1}$]', fontsize = 16, ha = 'center')
+            plt.ylabel('Intensidad [u.a.]', fontsize = 16, ha = 'center')
+            plt.title('Muestra {}'.format(archivo[0]), fontsize = 20, ha = 'center', weight = 'bold')
+            # plt.savefig('Prueba script analisis\{}.png'.format(archivo[0]))
+            # pdf.savefig(fig)
+            plt.show()
+            # plt.close()
 
-        newpar = par.tolist()
-        ajuste_bwf.append(newpar)
-        newp_lor = p_lor.tolist()
-        ajuste_lor.append(newp_lor)
-        xmax_bwf.append(w_max)
-        ymax_bwf.append(y_max)
-        ymax_lor.append(lor_ymax)
-        IdIg.append(lor_ymax/y_max)
+            newp_bwf = par_bwf.tolist()
+            ajuste_bwf.append(newp_bwf)
+            newp_lor = p_lor.tolist()
+            ajuste_lor.append(newp_lor)
+            xmax_bwf.append(w_max)
+            ymax_bwf.append(y_max)
+            ymax_lor.append(lor_ymax)
+            IdIg.append(lor_ymax/y_max)
+
+        except UnboundLocalError:
+            analisis_fail.append(arx)
+            print('{} agregado a analisis_fail'.format(arx))
 
     print('---Se analizaron todos los archivos---')
     # print('Parámetros de ajuste BWF:',ajuste_bwf)
@@ -191,11 +198,11 @@ with PdfPages('C:/Users/lucia/Dropbox/Labo 6 y 7/Raman/Prueba script analisis/Re
     plt.pie(torta, labels = labels, colors = colores)
     plt.legend(loc = 'lower right')
     plt.title('Fracción de sp$^3$ en la muestra')
-    plt.savefig('Prueba script analisis\Pie_chart.png')
-    pdf.savefig(graf_torta)
+    # plt.savefig('Prueba script analisis\Pie_chart.png')
+    # pdf.savefig(graf_torta)
     # plt.show()
     plt.close()
-
+    
 # excel = xlsxwriter.Workbook('Prueba script analisis\Parametros de ajuste.xlsx')
 # worksheet = excel.add_worksheet()
 # number_format = excel.add_format({'num_format' : '####0.##'})
@@ -217,4 +224,9 @@ with PdfPages('C:/Users/lucia/Dropbox/Labo 6 y 7/Raman/Prueba script analisis/Re
 #         worksheet.write(row_num + 1, col_num + 9, col_data, number_format)
 
 # excel.close()
+
+print('PROCESO TERMINADO')
+
+
+
 
