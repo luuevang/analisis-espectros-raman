@@ -8,3 +8,5 @@ contenido de sp$^3$ mayor a 0.2 y cuantas menor.
 Por cómo es el análisis propuesto, no es posible automatizarlo al 100%. Este script me devuelve todos los datos que necesito para poder finalizar el análisis en forma manual. El pdf es más que nada para ver los resultados todos juntos de forma rápida. 
 
 **Objetivo para el futuro cercano: agregar una visualización tipo dashboard.** 
+
+
