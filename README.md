@@ -18,7 +18,7 @@ Estos son los datos antes de ser analizados:
 
 Post análisis:
 
-![Alt text](AC3_1.png)
+<img src = 'Archivos/analyzed_data.png' width=400 height=200/>
 
 
 <!-- La idea es que este pdf sea un resumen de todos los resultados. Si bien faltaría la parte manual del análisis, ya viendo los gráficos uno se puede hacer a la idea de más o menos qué estructuras se obtuvieron. -->
