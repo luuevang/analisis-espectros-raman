@@ -14,7 +14,7 @@ El pdf con las figuras es útil para ver, rápidamente y en un solo lugar, todos
 ## Algunas figuras 
 Estos son los datos antes de ser analizados:
 
-![Alt text](raw_data.png)
+![Alt text](Archivos/raw_data.png)
 
 Post análisis:
 

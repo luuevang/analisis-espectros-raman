@@ -6,7 +6,7 @@ datos = np.loadtxt('C:/Users/lucia/Dropbox/Labo 6 y 7/Raman/Prueba script analis
 xdata = datos[:,0]
 ydata = datos[:,1]
 
-fig = plt.figure(figsize = (8, 4))
+fig = plt.figure(figsize = (4, 2))
 plt.plot(xdata, ydata)
 plt.legend(['Datos'])
 plt.xlabel('Raman Shift [cm$^{-1}$]', fontsize = 12, ha = 'center')
