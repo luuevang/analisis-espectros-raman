@@ -14,9 +14,7 @@ El pdf con las figuras es útil para ver, rápidamente y en un solo lugar, todos
 ## Algunas figuras 
 Estos son los datos antes de ser analizados:
 
-![](Archivos/raw_data.png | width=100)
-
-<img src = 'Archivos/raw_data.png' width=100 height = 60 />
+<img src = 'Archivos/raw_data.png' width=500 height = 300 />
 
 Post análisis:
 
