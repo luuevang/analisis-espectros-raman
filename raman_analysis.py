@@ -203,27 +203,27 @@ with PdfPages('Prueba script analisis/Resumen_resultados.pdf') as pdf:
     # plt.show()
     plt.close()
     
-# excel = xlsxwriter.Workbook('Prueba script analisis\Parametros de ajuste.xlsx')
-# worksheet = excel.add_worksheet()
-# number_format = excel.add_format({'num_format' : '####0.##'})
-# columnas = ['Muestra', 'Tiempo','I0', 'w0', 'Q', 'g_bwf', 'bwf x_max*', 'bwf y_max*', '', 'A', 'x0', 'g_lor', 'lor y_max*', '','I(D)/I(G)', 'Tipo de estructura']
-# worksheet.write_row(0, 0, columnas)
-# worksheet.write_column(1, 0, muestra)
-# worksheet.write_column(1, 6, xmax_bwf, number_format)
-# worksheet.write_column(1, 7, ymax_bwf, number_format)
-# worksheet.write_column(1, 12, ymax_lor, number_format)
-# worksheet.write_column(1, 14, IdIg, number_format)
-# worksheet.write_column(1, 15, estructura)
+excel = xlsxwriter.Workbook('Prueba script analisis\Parametros de ajuste.xlsx')
+worksheet = excel.add_worksheet()
+number_format = excel.add_format({'num_format' : '####0.##'})
+columnas = ['Muestra', 'Tiempo','I0', 'w0', 'Q', 'g_bwf', 'bwf x_max*', 'bwf y_max*', '', 'A', 'x0', 'g_lor', 'lor y_max*', '','I(D)/I(G)', 'Tipo de estructura']
+worksheet.write_row(0, 0, columnas)
+worksheet.write_column(1, 0, muestra)
+worksheet.write_column(1, 6, xmax_bwf, number_format)
+worksheet.write_column(1, 7, ymax_bwf, number_format)
+worksheet.write_column(1, 12, ymax_lor, number_format)
+worksheet.write_column(1, 14, IdIg, number_format)
+worksheet.write_column(1, 15, estructura)
 
-# for row_num, row_data in enumerate(ajuste_bwf):
-#     for col_num, col_data in enumerate(row_data):
-#         worksheet.write(row_num + 1, col_num + 2, col_data, number_format)
+for row_num, row_data in enumerate(ajuste_bwf):
+    for col_num, col_data in enumerate(row_data):
+        worksheet.write(row_num + 1, col_num + 2, col_data, number_format)
 
-# for row_num, row_data in enumerate(ajuste_lor):
-#     for col_num, col_data in enumerate(row_data):
-#         worksheet.write(row_num + 1, col_num + 9, col_data, number_format)
+for row_num, row_data in enumerate(ajuste_lor):
+    for col_num, col_data in enumerate(row_data):
+        worksheet.write(row_num + 1, col_num + 9, col_data, number_format)
 
-# excel.close()
+excel.close()
 
 print('PROCESO TERMINADO')
 
