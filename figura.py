@@ -8,8 +8,8 @@ ydata = datos[:,1]
 
 fig = plt.figure(figsize = (4, 2))
 plt.plot(xdata, ydata)
-plt.legend(['Datos'], fontsize = 14)
-plt.xlabel('Raman Shift [cm$^{-1}$]', fontsize = 14, ha = 'center')
-plt.ylabel('Intensidad [u.a.]', fontsize = 14, ha = 'center')
-plt.title('Espectro sin analizar', fontsize = 14, ha = 'center')
+plt.legend(['Datos'], fontsize = 18)
+plt.xlabel('Raman Shift [cm$^{-1}$]', fontsize = 18, ha = 'center')
+plt.ylabel('Intensidad [u.a.]', fontsize = 18, ha = 'center')
+plt.title('Espectro sin analizar', fontsize = 18, ha = 'center')
 plt.show()
