@@ -7,8 +7,7 @@ El análisis de estos espectros se puede separar en dos partes: en la primera se
 El programa está pensado para que se le indique el path de una carpeta con todos los archivos con los datos (en mi caso eran txt) y devuelva:
 - Un Excel con los parámetros de ajuste de los picos D y G y algunas operaciones hechas con esos parámetros (siguiendo el paper de Ferrari)
 - Un gráfico por cada espectro analizado
-- Un pdf que contiene las figuras de todos los espectros y un gráfico de torta que indica cuantas muestras tuvieron contenido de 
-$sp^3$ mayor a 0.2 y cuantas menor. 
+- Un pdf que contiene las figuras de todos los espectros y un gráfico de torta que indica cuantas muestras tuvieron contenido de sp3 mayor a 0.2 y cuantas menor. 
 
 El pdf con las figuras es útil para ver, rápidamente y en un solo lugar, todos los resultados. Si bien a esta altura todavía no se realizó el análisis manual que decide el tipo de estructura, a partir de los gráficos se puede hacer una suposición bastante acertada sobre cómo será la estructura.
 
