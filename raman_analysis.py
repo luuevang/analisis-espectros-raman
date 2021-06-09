@@ -41,7 +41,7 @@ def lorentz(w, *p):
     """
     A = p[0]    
     b = p[1]    
-    d = p[3]    
+    d = p[2]    
 
     return (2*A/np.pi)*d/(4*(w - b)**2 + d**2)
 
